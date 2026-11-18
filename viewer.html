@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Screenshot — GoFullPage Lite</title>
+  <link rel="stylesheet" href="viewer.css">
+</head>
+<body>
+  <header class="toolbar">
+    <div class="meta">
+      <strong id="pageTitle" class="title">Preparing screenshot…</strong>
+      <span id="pageStats" class="stats"></span>
+    </div>
+    <div class="actions">
+      <button id="zoomBtn" type="button" class="btn" disabled title="Toggle Fit / Native Pixels (Z)">Fit</button>
+      <button id="copyBtn" type="button" class="btn" disabled title="Copy PNG to Clipboard">Copy</button>
+      <button id="downloadBtn" type="button" class="btn btn-primary" disabled title="Download PNG (Ctrl/Cmd+S)">Download PNG</button>
+    </div>
+  </header>
+
+  <main id="stage" class="stage">
+    <div id="status" class="status">Stitching capture…</div>
+    <div id="canvasStack" class="canvas-stack" hidden></div>
+  </main>
+
+  <script type="module" src="viewer.js"></script>
+</body>
+</html>
