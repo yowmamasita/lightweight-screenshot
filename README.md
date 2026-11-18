@@ -1,17 +1,22 @@
-# GoFullPage Lite
+# Lightweight Screenshot
 
-Lightweight Manifest V3 Chrome extension for full-page and visible-area screenshots. ~56 KB total, zero dependencies, no build step, only `activeTab` and `scripting` permissions.
+Lightweight Manifest V3 extension for Chrome and Firefox for full-page and visible-area screenshots. ~56 KB total, zero dependencies, no build step, only `activeTab` and `scripting` permissions.
 
 ## Modes
 - **Full Page** (`1`): scrolls and stitches the entire page or nested scroll container.
 - **What You See** (`2` or `Alt+Shift+V` / `Option+Shift+V`): captures the visible viewport directly without touching the DOM or re-encoding the PNG.
 
 ## Install
-1. Clone or download this repo.
-2. Open `chrome://extensions` and enable **Developer mode**.
-3. Click **Load unpacked** and select this folder.
+- **Chrome** (121+): open `chrome://extensions`, enable **Developer mode**, click **Load unpacked** and select this folder.
+- **Firefox** (140+): open `about:debugging#/runtime/this-firefox`, click **Load Temporary Add-on…** and select `manifest.json`.
 
-*(Exclude `tests/`, `README.md`, and `LICENSE` when zipping for release.)*
+One package serves both stores:
+```bash
+zip -r lightweight-screenshot.zip manifest.json *.js *.html *.css icons
+```
+
+## Privacy
+Lightweight Screenshot collects no data. Screenshots are processed locally in your browser and never leave your device; the extension makes no network requests.
 
 ## Shortcuts
 - `Alt+Shift+P` (`Option+Shift+P` on Mac): open mode menu (or click the icon again during capture to cancel).

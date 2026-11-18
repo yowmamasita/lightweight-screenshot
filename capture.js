@@ -1,7 +1,7 @@
 (() => {
-  if (window.__gfpLite) {
+  if (window.__lwScreenshot) {
     try {
-      window.__gfpLite.cleanup();
+      window.__lwScreenshot.cleanup();
     } catch (_) {}
   }
 
@@ -133,14 +133,14 @@
 
     const style = document.createElement('style');
     style.textContent = `
-      html, body, [data-gfp-scroll-target] {
+      html, body, [data-lws-scroll-target] {
         scroll-behavior: auto !important;
         scroll-snap-type: none !important;
         scrollbar-width: none !important;
       }
       html::-webkit-scrollbar,
       body::-webkit-scrollbar,
-      [data-gfp-scroll-target]::-webkit-scrollbar {
+      [data-lws-scroll-target]::-webkit-scrollbar {
         display: none !important;
       }
     `;
@@ -164,8 +164,8 @@
       container = findNestedScrollContainer(vw, vh);
       if (container) {
         mode = 'container';
-        prevTargetAttr = container.getAttribute('data-gfp-scroll-target');
-        container.setAttribute('data-gfp-scroll-target', '1');
+        prevTargetAttr = container.getAttribute('data-lws-scroll-target');
+        container.setAttribute('data-lws-scroll-target', '1');
       }
     }
 
@@ -325,9 +325,9 @@
     }
     if (state.container) {
       if (state.prevTargetAttr === null) {
-        state.container.removeAttribute('data-gfp-scroll-target');
+        state.container.removeAttribute('data-lws-scroll-target');
       } else {
-        state.container.setAttribute('data-gfp-scroll-target', state.prevTargetAttr);
+        state.container.setAttribute('data-lws-scroll-target', state.prevTargetAttr);
       }
       state.container.scrollLeft = state.origContainerX;
       state.container.scrollTop = state.origContainerY;
@@ -339,6 +339,6 @@
     state = null;
   }
 
-  window.__gfpLite = { init, scrollToStep, cleanup };
+  window.__lwScreenshot = { init, scrollToStep, cleanup };
   return init();
 })();

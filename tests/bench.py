@@ -86,7 +86,7 @@ def bench_workload(browser, label, sections, items_per_section, single_frame=Fal
 
         page.add_script_tag(content=CAPTURE_JS)
         t0 = time.perf_counter()
-        meta = page.evaluate("() => window.__gfpLite.init()")
+        meta = page.evaluate("() => window.__lwScreenshot.init()")
         init_ms = (time.perf_counter() - t0) * 1000
 
         positions = page.evaluate("""async ({ meta, stitchSrc }) => {
@@ -100,7 +100,7 @@ def bench_workload(browser, label, sections, items_per_section, single_frame=Fal
         tiles = []
         for step in positions:
             ts = time.perf_counter()
-            actual = page.evaluate("(s) => window.__gfpLite.scrollToStep(s)", step)
+            actual = page.evaluate("(s) => window.__lwScreenshot.scrollToStep(s)", step)
             scroll_times.append((time.perf_counter() - ts) * 1000)
             png_bytes = page.screenshot(type="png")
             tiles.append({
@@ -110,7 +110,7 @@ def bench_workload(browser, label, sections, items_per_section, single_frame=Fal
                 "actualY": actual["actualY"],
                 "dataUrl": "data:image/png;base64," + base64.b64encode(png_bytes).decode("ascii"),
             })
-        page.evaluate("() => window.__gfpLite.cleanup()")
+        page.evaluate("() => window.__lwScreenshot.cleanup()")
 
         res = page.evaluate("""async ({ tiles, meta, stitchSrc }) => {
           const modUrl = URL.createObjectURL(new Blob([stitchSrc], { type: 'text/javascript' }));

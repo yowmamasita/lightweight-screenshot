@@ -45,7 +45,7 @@ def run_e2e():
             assert page.evaluate("window.scrollY") == 350
 
             page.add_script_tag(content=CAPTURE_JS)
-            meta = page.evaluate("() => window.__gfpLite.init()")
+            meta = page.evaluate("() => window.__lwScreenshot.init()")
             assert meta["mode"] == "window", f"Expected window mode, got {meta['mode']}"
             assert meta["viewportWidth"] == 800
             assert meta["viewportHeight"] == 600
@@ -63,7 +63,7 @@ def run_e2e():
 
             tiles = []
             for idx, step in enumerate(positions):
-                actual = page.evaluate("(s) => window.__gfpLite.scrollToStep(s)", step)
+                actual = page.evaluate("(s) => window.__lwScreenshot.scrollToStep(s)", step)
                 nav_vis = page.evaluate("getComputedStyle(document.getElementById('topNav')).visibility")
                 fab_vis = page.evaluate("getComputedStyle(document.getElementById('fab')).visibility")
 
@@ -88,7 +88,7 @@ def run_e2e():
                     "dataUrl": data_url,
                 })
 
-            page.evaluate("() => window.__gfpLite.cleanup()")
+            page.evaluate("() => window.__lwScreenshot.cleanup()")
             assert page.evaluate("window.scrollY") == 350, "cleanup() must restore original scrollY"
             assert page.evaluate("getComputedStyle(document.getElementById('topNav')).visibility") == "visible"
             assert page.evaluate("getComputedStyle(document.getElementById('fab')).visibility") == "visible"
@@ -156,10 +156,10 @@ def run_e2e():
               </style>
             </head>
             <body>
-              <div id="__gfpLiteStyle" hidden>keep-me</div>
+              <div id="__lwScreenshotStyle" hidden>keep-me</div>
               <div class="shell">
                 <header>Header</header>
-                <main id="scroller" data-gfp-scroll-target="user-attr">
+                <main id="scroller" data-lws-scroll-target="user-attr">
                   <div class="csticky" id="csticky">Container Sticky</div>
                   <div class="tall">Content</div>
                 </main>
@@ -169,17 +169,17 @@ def run_e2e():
             </html>
             """)
             page2.add_script_tag(content=CAPTURE_JS)
-            meta2 = page2.evaluate("() => window.__gfpLite.init()")
+            meta2 = page2.evaluate("() => window.__lwScreenshot.init()")
             assert meta2["mode"] == "container", f"Expected container mode, got {meta2}"
             assert meta2["containerRect"]["top"] == 68, meta2["containerRect"]
             assert meta2["containerRect"]["left"] == 8, meta2["containerRect"]
-            page2.evaluate("(s) => window.__gfpLite.scrollToStep(s)", {
+            page2.evaluate("(s) => window.__lwScreenshot.scrollToStep(s)", {
                 "x": 0, "y": 500, "isFirstRow": False, "isLastRow": False
             })
             assert page2.evaluate("getComputedStyle(document.getElementById('csticky')).visibility") == "hidden"
-            page2.evaluate("() => window.__gfpLite.cleanup()")
-            assert page2.evaluate("document.getElementById('__gfpLiteStyle')?.textContent") == "keep-me"
-            assert page2.evaluate("document.getElementById('scroller').getAttribute('data-gfp-scroll-target')") == "user-attr"
+            page2.evaluate("() => window.__lwScreenshot.cleanup()")
+            assert page2.evaluate("document.getElementById('__lwScreenshotStyle')?.textContent") == "keep-me"
+            assert page2.evaluate("document.getElementById('scroller').getAttribute('data-lws-scroll-target')") == "user-attr"
             page2.close()
 
             # 3. Test horizontal-only nested scroll container + 810px bottom-fixed footer preservation
@@ -195,10 +195,10 @@ def run_e2e():
             </html>
             """)
             page3.add_script_tag(content=CAPTURE_JS)
-            meta3 = page3.evaluate("() => window.__gfpLite.init()")
+            meta3 = page3.evaluate("() => window.__lwScreenshot.init()")
             assert meta3["mode"] == "container", meta3
             assert meta3["contentWidth"] == 1600, meta3
-            page3.evaluate("() => window.__gfpLite.cleanup()")
+            page3.evaluate("() => window.__lwScreenshot.cleanup()")
             page3.close()
 
             # 4. Test 810px page in 800px viewport with 60px bottom-fixed footer (full footer preserved)
@@ -213,7 +213,7 @@ def run_e2e():
             </html>
             """)
             page4.add_script_tag(content=CAPTURE_JS)
-            meta4 = page4.evaluate("() => window.__gfpLite.init()")
+            meta4 = page4.evaluate("() => window.__lwScreenshot.init()")
             pos4 = page4.evaluate("""async ({ meta, stitchSrc }) => {
               const modUrl = URL.createObjectURL(new Blob([stitchSrc], { type: 'text/javascript' }));
               const { computeScrollPositions } = await import(modUrl);
@@ -222,7 +222,7 @@ def run_e2e():
             }""", {"meta": meta4, "stitchSrc": STITCH_JS})
             tiles4 = []
             for step in pos4:
-                act = page4.evaluate("(s) => window.__gfpLite.scrollToStep(s)", step)
+                act = page4.evaluate("(s) => window.__lwScreenshot.scrollToStep(s)", step)
                 png_bytes = page4.screenshot(type="png")
                 tiles4.append({
                     "row": step["row"], "col": step["col"],
@@ -230,7 +230,7 @@ def run_e2e():
                     "bottomOverlays": act.get("bottomOverlays", []),
                     "dataUrl": "data:image/png;base64," + base64.b64encode(png_bytes).decode("ascii"),
                 })
-            page4.evaluate("() => window.__gfpLite.cleanup()")
+            page4.evaluate("() => window.__lwScreenshot.cleanup()")
             footer_check = page4.evaluate("""async ({ tiles, meta, stitchSrc }) => {
               const modUrl = URL.createObjectURL(new Blob([stitchSrc], { type: 'text/javascript' }));
               const { computeTileDrawOps } = await import(modUrl);

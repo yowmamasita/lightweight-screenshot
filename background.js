@@ -158,7 +158,7 @@ async function runFullPageCapture(tab, job) {
 
     const [{ result: actual }] = await chrome.scripting.executeScript({
       target: { tabId },
-      func: (arg) => window.__gfpLite.scrollToStep(arg),
+      func: (arg) => window.__lwScreenshot.scrollToStep(arg),
       args: [step],
     });
 
@@ -169,7 +169,7 @@ async function runFullPageCapture(tab, job) {
       if (!step.isLastRow && tiles.length > 0) {
         const [{ result: finalActual }] = await chrome.scripting.executeScript({
           target: { tabId },
-          func: (arg) => window.__gfpLite.scrollToStep(arg),
+          func: (arg) => window.__lwScreenshot.scrollToStep(arg),
           args: [{ ...step, y: prevRowY, isLastRow: true }],
         });
         if (!job.cancelled) {
@@ -238,14 +238,14 @@ async function runCapture(tab, mode = 'full') {
     }
   } catch (err) {
     hadError = true;
-    console.error('[GoFullPage Lite]', err);
+    console.error('[Lightweight Screenshot]', err);
     await showErrorBadge(tabId, `Capture failed: ${err?.message || err}`);
   } finally {
     if (mode !== 'visible') {
       try {
         await chrome.scripting.executeScript({
           target: { tabId },
-          func: () => window.__gfpLite?.cleanup(),
+          func: () => window.__lwScreenshot?.cleanup(),
         });
       } catch (_) {}
     }

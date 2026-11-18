@@ -126,7 +126,7 @@ async function copyImage() {
     setTimeout(() => {
       copyBtn.textContent = 'Copy';
     }, 1500);
-    console.error('[GoFullPage Lite] Copy failed:', err);
+    console.error('[Lightweight Screenshot] Copy failed:', err);
   }
 }
 
@@ -386,7 +386,7 @@ window.addEventListener('unload', () => {
       const { meta, tileDescs, totalTiles } = msg;
       baseFilename = makeBaseFilename(meta);
       titleEl.textContent = meta.title || meta.url || 'Screenshot';
-      document.title = `${titleEl.textContent} — GoFullPage Lite`;
+      document.title = `${titleEl.textContent} — Lightweight Screenshot`;
       statusEl.textContent = `Receiving ${totalTiles} frame${totalTiles === 1 ? '' : 's'}…`;
 
       const ack = () => {
@@ -407,7 +407,7 @@ window.addEventListener('unload', () => {
           await renderMultiTile(meta, tileDescs, fetchTile, ack);
         }
       } catch (err) {
-        console.error('[GoFullPage Lite] Render failed:', err);
+        console.error('[Lightweight Screenshot] Render failed:', err);
         showError(`Failed to stitch screenshot: ${err?.message || err}`);
       }
       return;

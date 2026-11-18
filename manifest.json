@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "GoFullPage Lite",
+  "name": "Lightweight Screenshot",
   "version": "1.0.0",
-  "minimum_chrome_version": "111",
+  "minimum_chrome_version": "121",
   "description": "Lightweight full-page and visible-area screenshot capture with zero extra permissions.",
   "permissions": [
     "activeTab",
@@ -24,6 +24,9 @@
   },
   "background": {
     "service_worker": "background.js",
+    "scripts": [
+      "background.js"
+    ],
     "type": "module"
   },
   "commands": {
@@ -40,6 +43,17 @@
         "mac": "Alt+Shift+V"
       },
       "description": "Capture what you see (visible area)"
+    }
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "lightweight-screenshot@bensarmiento.com",
+      "strict_min_version": "140.0",
+      "data_collection_permissions": {
+        "required": [
+          "none"
+        ]
+      }
     }
   }
 }
